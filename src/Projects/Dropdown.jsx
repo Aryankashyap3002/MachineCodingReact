@@ -1,14 +1,36 @@
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function DropDown() {
     const [open, setOpen] = useState(false);
 
     const listOptions = [{ name: 'Aryan' }, { name: 'Krityan' }];
 
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        if(!open) return;
+
+        const handleDropdown = (event) => {
+            console.log(event.target, dropdownRef.current);
+
+            if(dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setOpen(false);
+            }
+        }
+
+        document.addEventListener('mousedown', handleDropdown);
+
+        return () => {
+            document.removeEventListener('mousedown', handleDropdown);
+        }
+    }, [open])
+
+
+
     return (
-        <div className="relative mt-6 mr-20 w-96">
+        <div className="relative mt-6 mr-20 w-96" ref={dropdownRef}>
             <Button
                 className="bg-green-300 w-full flex justify-center items-center gap-2 py-4 px-6"
                 onClick={() => setOpen(!open)}
