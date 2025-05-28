@@ -1,60 +1,63 @@
-import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-export function DropDown() {
-    const [open, setOpen] = useState(false);
+export function Dropdown() {
+    const studentList = ["Aryan", "Krityan", "Ankit"];
+    const [isOpen, setIsOpen] = useState(false);
 
-    const listOptions = [{ name: 'Aryan' }, { name: 'Krityan' }];
+    const openRef = useRef(null);
 
-    const dropdownRef = useRef(null);
+    function handleClick() {
+        setIsOpen(!isOpen);
+        console.log(openRef);
+    }
 
     useEffect(() => {
-        if(!open) return;
+        if(!isOpen) return;
 
-        const handleDropdown = (event) => {
-            console.log(event.target, dropdownRef.current);
-
-            if(dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setOpen(false);
+        const handleToggleFromOutside = (event) => {
+            
+            if(openRef.current && !openRef.current.contains(event.target)) {
+                console.log("event is ", event.target, openRef.current);
+                setIsOpen(false);
             }
+            
+
         }
 
-        document.addEventListener('mousedown', handleDropdown);
+        addEventListener("mousedown", handleToggleFromOutside);
 
         return () => {
-            document.removeEventListener('mousedown', handleDropdown);
+            removeEventListener("mousedown", handleToggleFromOutside);
         }
-    }, [open])
-
-
+    }, [isOpen])
 
     return (
-        <div className="relative mt-6 mr-20 w-96" ref={dropdownRef}>
-            <Button
-                className="bg-green-300 w-full flex justify-center items-center gap-2 py-4 px-6"
-                onClick={() => setOpen(!open)}
-            >
-                Select an option
-                {open ? (
-                    <ChevronDown />
-                ) : (
-                    <ChevronDown style={{ transform: 'rotate(270deg)' }} />
-                )}
-            </Button>
-
-            {open ? (
-                <ul className="absolute top-full left-0 w-full bg-green-300 border border-green-600 shadow-md z-10">
-                    {listOptions.map((obj, index) => (
-                        <li
-                            key={index}
-                            className="p-2 bg-green-500 text-black hover:bg-green-700 cursor-pointer"
-                        >
-                            ({Object.keys(obj)} : {obj.name})
-                        </li>
-                    ))}
-                </ul>
-            ) : null}
+    <div className="relative" ref={openRef}>
+        {/* Fixed Button */}
+        <div className="fixed top-4 w-80 h-12 bg-yellow-300">
+        <button
+            onClick={handleClick}
+            className="w-full h-full text-white"
+        >
+            {isOpen ? "Click to close" : "Click to open"}
+        </button>
         </div>
+
+        {/* Dropdown Menu */}
+        {isOpen && (
+        <div className="fixed top-16 w-80 bg-green-300" >
+            <ul>
+            {studentList.map((ele, idx) => (
+                <li
+                className="bg-blue-300 w-full border border-gray-500 my-1"
+                key={idx}
+                >
+                {ele}
+                </li>
+            ))}
+            </ul>
+        </div>
+        )}
+    </div>
     );
 }
