@@ -1,11 +1,11 @@
 import './App.css'
-import { Dropdown } from './Projects/Dropdown'
+import { InlineEditableInput } from './Projects/InlineEditableInput'
 
 function App() {
 
   return (
     <>
-      <Dropdown />
+      <InlineEditableInput />
     </>
   )
 }
