@@ -1,11 +1,10 @@
 import './App.css'
-import { InlineEditableInput } from './Projects/InlineEditableInput'
-
+import { TempaeratureConverter } from './Projects/TemperatureConverter'
 function App() {
 
   return (
     <>
-      <InlineEditableInput />
+      <TempaeratureConverter />
     </>
   )
 }
